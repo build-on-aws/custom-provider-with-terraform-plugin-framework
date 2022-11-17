@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  opensearch:
+    image: opensearchproject/opensearch:2.4.0
+    container_name: opensearch
+    hostname: opensearch
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 9200:9200
+      - 9600:9600
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: ["CMD-SHELL", "curl -s http://localhost:9200"]
+
+networks:
+  default:
+    name: backend
