@@ -106,7 +106,7 @@ Check again:
 terraform plan
 ```
 
-Once the command completes, you should no more warnings.
+Once the command completes, you should have no more warnings.
 
 ```bash
 Terraform will perform the following actions:
