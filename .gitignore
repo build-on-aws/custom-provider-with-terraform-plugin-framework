@@ -1,4 +1,4 @@
-.vscode/*.log
+.vscode
 
 examples/.terraform
 examples/.terraform.lock.hcl
