@@ -1,4 +1,4 @@
-package main
+package buildonaws
 
 import (
 	"bytes"
@@ -22,12 +22,12 @@ var (
 	_ resource.ResourceWithConfigure = &characterResource{}
 )
 
-type characterResource struct {
-	backendClient *opensearch.Client
-}
-
 func NewCharacterResource() resource.Resource {
 	return &characterResource{}
+}
+
+type characterResource struct {
+	backendClient *opensearch.Client
 }
 
 func (r *characterResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {

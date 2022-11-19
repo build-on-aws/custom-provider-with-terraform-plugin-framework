@@ -1,4 +1,4 @@
-package main
+package buildonaws
 
 import "github.com/hashicorp/terraform-plugin-framework/types"
 

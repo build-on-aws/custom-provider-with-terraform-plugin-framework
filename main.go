@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"terraform-provider-buildonaws/buildonaws"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
@@ -17,7 +18,7 @@ func main() {
 
 	ctx := context.Background()
 
-	providerserver.Serve(ctx, NewBuildOnAWSProvider, providerserver.ServeOpts{
+	providerserver.Serve(ctx, buildonaws.New, providerserver.ServeOpts{
 		Debug:   debug,
 		Address: "aws.amazon.com/terraform/buildonaws",
 	})

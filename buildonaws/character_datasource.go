@@ -1,4 +1,4 @@
-package main
+package buildonaws
 
 import (
 	"bytes"
@@ -20,12 +20,12 @@ var (
 	_ datasource.DataSourceWithConfigure = &characterDataSource{}
 )
 
-type characterDataSource struct {
-	backendClient *opensearch.Client
-}
-
 func NewCharacterDataSource() datasource.DataSource {
 	return &characterDataSource{}
+}
+
+type characterDataSource struct {
+	backendClient *opensearch.Client
 }
 
 func (c *characterDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {

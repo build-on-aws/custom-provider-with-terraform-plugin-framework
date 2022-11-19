@@ -1,4 +1,4 @@
-package main
+package buildonaws
 
 import (
 	"context"
@@ -22,11 +22,11 @@ var (
 	_ provider.Provider = &buildOnAWSProvider{}
 )
 
-type buildOnAWSProvider struct {
+func New() provider.Provider {
+	return &buildOnAWSProvider{}
 }
 
-func NewBuildOnAWSProvider() provider.Provider {
-	return &buildOnAWSProvider{}
+type buildOnAWSProvider struct {
 }
 
 func (p *buildOnAWSProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {

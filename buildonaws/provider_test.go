@@ -1,4 +1,4 @@
-package main
+package buildonaws
 
 import (
 	"bytes"
@@ -22,7 +22,7 @@ import (
 
 var (
 	testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-		providerName: providerserver.NewProtocol6WithError(NewBuildOnAWSProvider()),
+		providerName: providerserver.NewProtocol6WithError(New()),
 	}
 )
 
