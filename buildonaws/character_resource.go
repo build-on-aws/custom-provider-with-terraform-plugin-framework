@@ -9,6 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -18,8 +19,9 @@ import (
 )
 
 var (
-	_ resource.Resource              = &characterResource{}
-	_ resource.ResourceWithConfigure = &characterResource{}
+	_ resource.Resource                = &characterResource{}
+	_ resource.ResourceWithConfigure   = &characterResource{}
+	_ resource.ResourceWithImportState = &characterResource{}
 )
 
 func NewCharacterResource() resource.Resource {
@@ -86,6 +88,10 @@ func (c *characterResource) Configure(ctx context.Context, req resource.Configur
 
 	c.backendClient = req.ProviderData.(*opensearch.Client)
 
+}
+
+func (c *characterResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root(idField), req, resp)
 }
 
 func (c *characterResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

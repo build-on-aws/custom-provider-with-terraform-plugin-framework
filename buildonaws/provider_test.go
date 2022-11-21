@@ -186,6 +186,12 @@ func TestAccCharacterResource(t *testing.T) {
 					resource.TestCheckResourceAttrSet(resourceName, lastUpdatedField),
 				),
 			},
+			{
+				ResourceName:            resourceName,
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{lastUpdatedField},
+			},
 			// Update and Read testing
 			{
 				Config: tfConfigUpdateReadTest,
