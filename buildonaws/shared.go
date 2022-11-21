@@ -1,6 +1,13 @@
 package buildonaws
 
-import "strings"
+import (
+	"context"
+	"fmt"
+	"strings"
+
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
+)
 
 var (
 	providerName            = "buildonaws"
@@ -27,3 +34,52 @@ var (
 	typeFieldDesc     = "The type of character. Possible values: '" + strings.Join(characterTypes, ",") + "'."
 	lastUpdatedField  = "last_updated"
 )
+
+type backendContainer struct {
+	Container testcontainers.Container
+	Address   string
+}
+
+func setupBackend(ctx context.Context) (*backendContainer, error) {
+
+	containerRequest := testcontainers.ContainerRequest{
+		Image:        "opensearchproject/opensearch:2.4.0",
+		Name:         "opensearch",
+		ExposedPorts: []string{"9200/tcp"},
+		Env: map[string]string{
+			"cluster.name":                "opensearch-cluster",
+			"node.name":                   "opensearch-node",
+			"discovery.type":              "single-node",
+			"bootstrap.memory_lock":       "true",
+			"OPENSEARCH_JAVA_OPTS":        "-Xms1g -Xmx1g",
+			"DISABLE_INSTALL_DEMO_CONFIG": "true",
+			"DISABLE_SECURITY_PLUGIN":     "true",
+		},
+		WaitingFor: wait.ForLog("[opensearch-node] Node started"),
+	}
+
+	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+		ContainerRequest: containerRequest,
+		Started:          true,
+		Reuse:            true,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	host, err := container.Host(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	mappedPort, err := container.MappedPort(ctx, "9200")
+	if err != nil {
+		return nil, err
+	}
+
+	return &backendContainer{
+		Container: container,
+		Address: fmt.Sprintf("http://%s:%s",
+			host, mappedPort.Port())}, nil
+
+}

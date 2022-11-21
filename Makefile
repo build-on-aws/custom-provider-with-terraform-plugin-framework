@@ -28,7 +28,7 @@ clean:
 	rm -rf examples/.terraform* || true
 
 test:
-	TF_ACC=1 go test -count=1 -parallel=4 -timeout 5m -v ./...
+	TF_ACC=1 go test -count=1 -parallel=4 -timeout 5m -v ./${NAME}
 
 generate:
 	go generate ./...
