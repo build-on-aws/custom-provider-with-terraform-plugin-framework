@@ -30,19 +30,19 @@ const (
 
 func New() provider.Provider {
 	return &buildOnAWSProvider{
-		Version: version(),
-		Commit:  shortCommit(),
+		version: version(),
+		commit:  shortCommit(),
 	}
 }
 
 type buildOnAWSProvider struct {
-	Version string
-	Commit  string
+	version string
+	commit  string
 }
 
 func (p *buildOnAWSProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = providerName
-	resp.Version = p.Version
+	resp.Version = p.version
 }
 
 func (p *buildOnAWSProvider) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
