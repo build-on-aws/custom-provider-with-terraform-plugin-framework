@@ -17,7 +17,7 @@ builds:
   flags:
     - -trimpath
   ldflags:
-    - '-s -w -X buildonaws.tag={{.Version}} -X buildonaws.commit={{.Commit}}'
+    - '-s -w -X terraform-provider-buildonaws/buildonaws.tag={{.Version}} -X terraform-provider-buildonaws/buildonaws.commit={{.Commit}}'
   goos:
 #    - freebsd
     - windows
