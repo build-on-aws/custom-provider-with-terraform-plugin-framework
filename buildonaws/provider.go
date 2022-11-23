@@ -19,18 +19,30 @@ import (
 )
 
 var (
-	_ provider.Provider = &buildOnAWSProvider{}
+	_           provider.Provider = &buildOnAWSProvider{}
+	commit, tag string            // populated by goreleaser
+)
+
+const (
+	defaultVersion = "0.0.0"
+	defaultCommit  = "devel"
 )
 
 func New() provider.Provider {
-	return &buildOnAWSProvider{}
+	return &buildOnAWSProvider{
+		version: version(),
+		commit:  shortCommit(),
+	}
 }
 
 type buildOnAWSProvider struct {
+	version string
+	commit  string
 }
 
 func (p *buildOnAWSProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = providerName
+	resp.Version = p.version
 }
 
 func (p *buildOnAWSProvider) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
@@ -118,4 +130,19 @@ func (p *buildOnAWSProvider) Resources(_ context.Context) []func() resource.Reso
 	return []func() resource.Resource{
 		NewCharacterResource,
 	}
+}
+
+func shortCommit() string {
+	if len(commit) > 7 {
+		return commit[:8]
+	} else {
+		return defaultCommit
+	}
+}
+
+func version() string {
+	if tag == "" {
+		return defaultVersion
+	}
+	return tag
 }
