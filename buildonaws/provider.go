@@ -2,8 +2,6 @@ package buildonaws
 
 import (
 	"context"
-	"crypto/tls"
-	"net/http"
 	"net/url"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -102,9 +100,6 @@ func (p *buildOnAWSProvider) Configure(ctx context.Context, req provider.Configu
 
 	backendClient, _ := opensearch.NewClient(
 		opensearch.Config{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
 			Addresses: []string{backendAddressValue},
 		},
 	)

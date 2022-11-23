@@ -3,9 +3,7 @@ package buildonaws
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"encoding/json"
-	"net/http"
 	"strings"
 	"testing"
 
@@ -71,9 +69,6 @@ func createCharacter(ctx context.Context, character *ComicCharacter,
 
 	backendClient, err := opensearch.NewClient(
 		opensearch.Config{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
 			Addresses: []string{backendContainer.Address},
 		},
 	)
