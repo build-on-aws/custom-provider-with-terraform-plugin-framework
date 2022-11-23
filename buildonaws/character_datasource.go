@@ -29,7 +29,7 @@ type characterDataSource struct {
 }
 
 func (c *characterDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + dataSourceName
+	resp.TypeName = req.ProviderTypeName + characterDataSourceTypeName
 }
 
 func (c *characterDataSource) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {

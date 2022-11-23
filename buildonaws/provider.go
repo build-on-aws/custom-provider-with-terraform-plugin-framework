@@ -54,7 +54,7 @@ type buildOnAWSProvider struct {
 }
 
 func (p *buildOnAWSProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = providerName
+	resp.TypeName = providerTypeName
 	resp.Version = p.version
 }
 
