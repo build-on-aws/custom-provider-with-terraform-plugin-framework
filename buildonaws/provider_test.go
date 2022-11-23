@@ -11,7 +11,7 @@ import (
 
 var (
 	testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-		providerName: providerserver.NewProtocol6WithError(New()),
+		providerTypeName: providerserver.NewProtocol6WithError(New()),
 	}
 )
 

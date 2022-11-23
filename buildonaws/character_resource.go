@@ -33,7 +33,7 @@ type characterResource struct {
 }
 
 func (r *characterResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + resourceName
+	resp.TypeName = req.ProviderTypeName + characterResourceTypeName
 }
 
 func (c *characterResource) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
