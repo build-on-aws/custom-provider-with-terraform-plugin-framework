@@ -23,16 +23,29 @@ var (
 	commit, tag string            // populated by goreleaser
 )
 
-const (
-	defaultVersion = "0.0.0"
-	defaultCommit  = "devel"
-)
-
 func New() provider.Provider {
+
+	const (
+		defaultVersion = "0.0.0"
+		defaultCommit  = "devel"
+	)
+
 	return &buildOnAWSProvider{
-		version: version(),
-		commit:  shortCommit(),
+		version: func() string {
+			if len(tag) == 0 {
+				return defaultVersion
+			}
+			return tag
+		}(),
+		commit: func() string {
+			if len(commit) > 7 {
+				return commit[:8]
+			} else {
+				return defaultCommit
+			}
+		}(),
 	}
+
 }
 
 type buildOnAWSProvider struct {
@@ -130,19 +143,4 @@ func (p *buildOnAWSProvider) Resources(_ context.Context) []func() resource.Reso
 	return []func() resource.Resource{
 		NewCharacterResource,
 	}
-}
-
-func shortCommit() string {
-	if len(commit) > 7 {
-		return commit[:8]
-	} else {
-		return defaultCommit
-	}
-}
-
-func version() string {
-	if tag == "" {
-		return defaultVersion
-	}
-	return tag
 }
