@@ -3,7 +3,8 @@ package buildonaws
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type BuildOnAWSProviderModel struct {
-	BackendAddress types.String `tfsdk:"backend_address"`
+	BackendAddress    types.String `tfsdk:"backend_address"`
+	SkipTLSValidation types.Bool   `tfsdk:"skip_tls_validation"`
 }
 
 type CharacterDataSourceModel struct {
