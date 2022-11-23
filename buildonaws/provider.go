@@ -67,6 +67,11 @@ func (p *buildOnAWSProvider) GetSchema(_ context.Context) (tfsdk.Schema, diag.Di
 				Type:        types.StringType,
 				Optional:    true,
 			},
+			skipTLSValidationField: {
+				Description: skipTLSValidationFieldDesc,
+				Type:        types.BoolType,
+				Optional:    true,
+			},
 		},
 	}, nil
 }
@@ -100,10 +105,16 @@ func (p *buildOnAWSProvider) Configure(ctx context.Context, req provider.Configu
 
 	}
 
+	var insecureSkipVerify bool
+	if !config.SkipTLSValidation.IsNull() && config.SkipTLSValidation.ValueBool() {
+		insecureSkipVerify = true
+		tflog.Debug(ctx, "NOT doing TLS certificate validation")
+	}
+
 	backendClient, _ := opensearch.NewClient(
 		opensearch.Config{
 			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
 			},
 			Addresses: []string{backendAddressValue},
 		},

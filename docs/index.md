@@ -24,3 +24,4 @@ provider "buildonaws" {
 ### Optional
 
 - `backend_address` (String) Address to connect to the OpenSearch backend.
+- `skip_tls_validation` (Boolean) Allows TLS connection to OpenSearch backend running with untrusted certificate.

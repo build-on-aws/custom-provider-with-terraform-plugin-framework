@@ -10,12 +10,14 @@ import (
 )
 
 var (
-	providerTypeName        = "buildonaws"
-	backendIndex            = providerTypeName
-	providerDesc            = "Provider to manage characters from comic books."
-	backendAddressField     = "backend_address"
-	backendAddressFieldDesc = "Address to connect to the OpenSearch backend."
-	backendAddressDefault   = "http://localhost:9200"
+	providerTypeName           = "buildonaws"
+	backendIndex               = providerTypeName
+	providerDesc               = "Provider to manage characters from comic books."
+	backendAddressField        = "backend_address"
+	backendAddressFieldDesc    = "Address to connect to the OpenSearch backend."
+	backendAddressDefault      = "http://localhost:9200"
+	skipTLSValidationField     = "skip_tls_validation"
+	skipTLSValidationFieldDesc = "Allows TLS connection to OpenSearch backend running with untrusted certificate."
 )
 
 var (
