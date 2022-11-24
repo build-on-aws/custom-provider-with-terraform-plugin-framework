@@ -12,6 +12,11 @@ PLUGIN_DIR=${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${OS_ARCH}
 
 default: install
 
+clean:
+	@echo "▶️ Removing the Terraform plugin"
+	rm -rf ~/.terraform.d/plugins/${PLUGIN_DIR}
+	rm -rf examples/.terraform* || true
+
 build: clean
 	@echo "▶️ Building the Terraform binary file"
 	go build -gcflags="all=-N -l" -o ${BINARY}
@@ -21,11 +26,6 @@ install: build
 	mkdir -p ~/.terraform.d/plugins/${PLUGIN_DIR}
 	mv ${BINARY} ~/.terraform.d/plugins/${PLUGIN_DIR}
 	@echo "▶️ Build executed successfully"
-
-clean:
-	@echo "▶️ Removing the Terraform plugin"
-	rm -rf ~/.terraform.d/plugins/${PLUGIN_DIR}
-	rm -rf examples/.terraform* || true
 
 test:
 	TF_ACC=1 go test -count=1 -parallel=4 -timeout 5m -v ./${NAME}
