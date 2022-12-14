@@ -5,12 +5,10 @@ import (
 	"net/url"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/opensearch-project/opensearch-go/v2"
 	"github.com/opensearch-project/opensearch-go/v2/opensearchapi"
@@ -56,17 +54,16 @@ func (p *buildOnAWSProvider) Metadata(_ context.Context, _ provider.MetadataRequ
 	resp.Version = p.version
 }
 
-func (p *buildOnAWSProvider) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (p *buildOnAWSProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		Description: providerDesc,
-		Attributes: map[string]tfsdk.Attribute{
-			backendAddressField: {
+		Attributes: map[string]schema.Attribute{
+			backendAddressField: schema.StringAttribute{
 				Description: backendAddressFieldDesc,
-				Type:        types.StringType,
 				Optional:    true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (p *buildOnAWSProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {

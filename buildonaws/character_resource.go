@@ -8,10 +8,12 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/opensearch-project/opensearch-go/v2"
@@ -36,46 +38,43 @@ func (r *characterResource) Metadata(_ context.Context, req resource.MetadataReq
 	resp.TypeName = req.ProviderTypeName + characterResourceTypeName
 }
 
-func (c *characterResource) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
-		Attributes: map[string]tfsdk.Attribute{
-			idField: {
+func (c *characterResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			idField: schema.StringAttribute{
 				Description: idFieldDesc,
-				Type:        types.StringType,
 				Computed:    true,
-				PlanModifiers: []tfsdk.AttributePlanModifier{
-					resource.UseStateForUnknown(),
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			fullNameField: {
+			fullNameField: schema.StringAttribute{
 				Description: fullNameFieldDesc,
-				Type:        types.StringType,
-				Required:    true,
+				Optional:    true,
+				Computed:    true,
 			},
-			identityField: {
+			identityField: schema.StringAttribute{
 				Description: identityFieldDesc,
-				Type:        types.StringType,
 				Required:    true,
 			},
-			knownasField: {
+			knownasField: schema.StringAttribute{
 				Description: knowasFieldDesc,
-				Type:        types.StringType,
-				Required:    true,
+				Optional:    true,
+				Computed:    true,
 			},
-			typeField: {
+			typeField: schema.StringAttribute{
 				Description: typeFieldDesc,
-				Type:        types.StringType,
-				Required:    true,
-				Validators: []tfsdk.AttributeValidator{
+				Optional:    true,
+				Computed:    true,
+				Validators: []validator.String{
 					stringvalidator.OneOf(characterTypes...),
 				},
 			},
-			lastUpdatedField: {
-				Type:     types.StringType,
+			lastUpdatedField: schema.StringAttribute{
 				Computed: true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (c *characterResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {

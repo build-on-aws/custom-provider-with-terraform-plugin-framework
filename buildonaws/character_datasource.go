@@ -7,8 +7,7 @@ import (
 	"io"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/opensearch-project/opensearch-go/v2"
@@ -32,39 +31,34 @@ func (c *characterDataSource) Metadata(_ context.Context, req datasource.Metadat
 	resp.TypeName = req.ProviderTypeName + characterDataSourceTypeName
 }
 
-func (c *characterDataSource) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
-		Attributes: map[string]tfsdk.Attribute{
-			idField: {
+func (c *characterDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			idField: schema.StringAttribute{
 				Description: idFieldDesc,
-				Type:        types.StringType,
 				Computed:    true,
 			},
-			fullNameField: {
+			fullNameField: schema.StringAttribute{
 				Description: fullNameFieldDesc,
-				Type:        types.StringType,
 				Optional:    true,
 				Computed:    true,
 			},
-			identityField: {
+			identityField: schema.StringAttribute{
 				Description: identityFieldDesc,
-				Type:        types.StringType,
 				Required:    true,
 			},
-			knownasField: {
+			knownasField: schema.StringAttribute{
 				Description: knowasFieldDesc,
-				Type:        types.StringType,
 				Optional:    true,
 				Computed:    true,
 			},
-			typeField: {
+			typeField: schema.StringAttribute{
 				Description: typeFieldDesc,
-				Type:        types.StringType,
 				Optional:    true,
 				Computed:    true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (c *characterDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
