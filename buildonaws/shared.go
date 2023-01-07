@@ -43,7 +43,7 @@ type backendContainer struct {
 func setupBackend(ctx context.Context) (*backendContainer, error) {
 
 	containerRequest := testcontainers.ContainerRequest{
-		Image:        "opensearchproject/opensearch:2.4.0",
+		Image:        "opensearchproject/opensearch:2.4.1",
 		Name:         "opensearch",
 		ExposedPorts: []string{"9200/tcp"},
 		Env: map[string]string{
