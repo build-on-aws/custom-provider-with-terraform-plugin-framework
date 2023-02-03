@@ -22,7 +22,6 @@ services:
         hard: 65536
     ports:
       - 9200:9200
-      - 9600:9600
     healthcheck:
       interval: 20s
       retries: 10
