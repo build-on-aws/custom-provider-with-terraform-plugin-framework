@@ -2,11 +2,16 @@ package buildonaws
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"os"
 	"strings"
+	"sync"
 
+	"github.com/docker/go-connections/nat"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -40,12 +45,36 @@ type backendContainer struct {
 	Address   string
 }
 
+var (
+	onlyOnce       sync.Once
+	containerImage string
+	containerName  string
+	containerPort  string
+)
+
 func setupBackend(ctx context.Context) (*backendContainer, error) {
 
+	onlyOnce.Do(func() {
+
+		fileBytes, _ := os.ReadFile("../docker-compose.yml")
+		dc := make(map[interface{}]interface{})
+		yaml.Unmarshal(fileBytes, &dc)
+
+		containerImage = dc["services"].(map[interface{}]interface{})["opensearch"].(map[interface{}]interface{})["image"].(string)
+		containerName = dc["services"].(map[interface{}]interface{})["opensearch"].(map[interface{}]interface{})["container_name"].(string)
+		cp := dc["services"].(map[interface{}]interface{})["opensearch"].(map[interface{}]interface{})["ports"].([]interface{})[0]
+		containerPort = strings.Split(cp.(string), ":")[0]
+
+	})
+
+	if containerImage == "" || containerName == "" || containerPort == "" {
+		return nil, errors.New("something wrong with the Docker Compose file")
+	}
+
 	containerRequest := testcontainers.ContainerRequest{
-		Image:        "opensearchproject/opensearch:2.5.0",
-		Name:         "opensearch",
-		ExposedPorts: []string{"9200/tcp"},
+		Image:        containerImage,
+		Name:         containerName,
+		ExposedPorts: []string{containerPort + "/tcp"},
 		Env: map[string]string{
 			"cluster.name":                "opensearch-cluster",
 			"node.name":                   "opensearch-node",
@@ -72,7 +101,7 @@ func setupBackend(ctx context.Context) (*backendContainer, error) {
 		return nil, err
 	}
 
-	mappedPort, err := container.MappedPort(ctx, "9200")
+	mappedPort, err := container.MappedPort(ctx, nat.Port(containerPort))
 	if err != nil {
 		return nil, err
 	}
