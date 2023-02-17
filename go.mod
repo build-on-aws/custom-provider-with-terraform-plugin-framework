@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/terraform-plugin-go v0.14.3
 	github.com/hashicorp/terraform-plugin-log v0.8.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.25.0
-	github.com/opensearch-project/opensearch-go/v2 v2.1.0
+	github.com/opensearch-project/opensearch-go/v2 v2.2.0
 	github.com/testcontainers/testcontainers-go v0.18.0
 )
 
