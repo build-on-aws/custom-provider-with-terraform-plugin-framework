@@ -34,8 +34,8 @@ require (
 	github.com/moby/term v0.0.0-20221205130635-1aeaba878587 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
-	github.com/opencontainers/image-spec v1.1.0-rc2.0.20221005185240-3a7f492d3f1b // indirect
-	github.com/opencontainers/runc v1.1.4 // indirect
+	github.com/opencontainers/image-spec v1.1.0-rc2.0.20230316182337-dd7fd714f540 // indirect
+	github.com/opencontainers/runc v1.1.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
