@@ -50,6 +50,7 @@ var (
 	containerImage string
 	containerName  string
 	containerPort  string
+	environment    map[string]string
 )
 
 func setupBackend(ctx context.Context) (*backendContainer, error) {
@@ -65,9 +66,16 @@ func setupBackend(ctx context.Context) (*backendContainer, error) {
 		cp := dc["services"].(map[interface{}]interface{})["opensearch"].(map[interface{}]interface{})["ports"].([]interface{})[0]
 		containerPort = strings.Split(cp.(string), ":")[0]
 
+		environment = make(map[string]string)
+		env := dc["services"].(map[interface{}]interface{})["opensearch"].(map[interface{}]interface{})["environment"].([]interface{})
+		for _, item := range env {
+			entryParts := strings.Split(item.(string), "=")
+			environment[entryParts[0]] = entryParts[1]
+		}
+
 	})
 
-	if containerImage == "" || containerName == "" || containerPort == "" {
+	if containerImage == "" || containerName == "" || containerPort == "" || environment == nil {
 		return nil, errors.New("something wrong with the Docker Compose file")
 	}
 
@@ -75,16 +83,8 @@ func setupBackend(ctx context.Context) (*backendContainer, error) {
 		Image:        containerImage,
 		Name:         containerName,
 		ExposedPorts: []string{containerPort + "/tcp"},
-		Env: map[string]string{
-			"cluster.name":                "opensearch-cluster",
-			"node.name":                   "opensearch-node",
-			"discovery.type":              "single-node",
-			"bootstrap.memory_lock":       "true",
-			"OPENSEARCH_JAVA_OPTS":        "-Xms1g -Xmx1g",
-			"DISABLE_INSTALL_DEMO_CONFIG": "true",
-			"DISABLE_SECURITY_PLUGIN":     "true",
-		},
-		WaitingFor: wait.ForLog("Cluster health status changed from [YELLOW] to [GREEN]"),
+		Env:          environment,
+		WaitingFor:   wait.ForLog("Cluster health status changed from [YELLOW] to [GREEN]"),
 	}
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
