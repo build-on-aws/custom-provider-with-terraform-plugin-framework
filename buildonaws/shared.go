@@ -84,7 +84,7 @@ func setupBackend(ctx context.Context) (*backendContainer, error) {
 			"DISABLE_INSTALL_DEMO_CONFIG": "true",
 			"DISABLE_SECURITY_PLUGIN":     "true",
 		},
-		WaitingFor: wait.ForLog("[opensearch-node] Node started"),
+		WaitingFor: wait.ForLog("Cluster health status changed from [YELLOW] to [GREEN]"),
 	}
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
