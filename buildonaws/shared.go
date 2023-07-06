@@ -53,7 +53,7 @@ var (
 	environment    map[string]string
 )
 
-func setupBackend(ctx context.Context) (*backendContainer, error) {
+func createBackendContainer(ctx context.Context) (*backendContainer, error) {
 
 	onlyOnce.Do(func() {
 
@@ -83,7 +83,7 @@ func setupBackend(ctx context.Context) (*backendContainer, error) {
 		Image:        containerImage,
 		Name:         containerName,
 		ExposedPorts: []string{containerPort + "/tcp"},
-		Env:          environment,
+		Env:          map[string]string{},
 		WaitingFor:   wait.ForLog("Cluster health status changed from [YELLOW] to [GREEN]"),
 	}
 

@@ -16,7 +16,7 @@ func TestAccCharacterDataSource(t *testing.T) {
 
 	ctx := context.Background()
 
-	backendContainer, err := setupBackend(ctx)
+	backendContainer, err := createBackendContainer(ctx)
 	if err != nil {
 		t.Error(err)
 	}
