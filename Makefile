@@ -28,7 +28,7 @@ install: build
 	@echo "▶️ Build executed successfully"
 
 test:
-	TF_ACC=1 go test -count=1 -parallel=4 -timeout 5m -v ./${NAME}
+	TF_ACC=1 go test -count=1 -timeout 5m -v ./${NAME}
 
 generate:
 	go generate ./...
