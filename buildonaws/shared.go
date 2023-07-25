@@ -84,7 +84,7 @@ func createBackendContainer(ctx context.Context) (*backendContainer, error) {
 		Name:         containerName,
 		ExposedPorts: []string{containerPort + "/tcp"},
 		Env:          environment,
-		WaitingFor:   wait.ForLog("Cluster health status changed from [YELLOW] to [GREEN]"),
+		WaitingFor:   wait.ForLog("[opensearch-node] Node started"),
 	}
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
